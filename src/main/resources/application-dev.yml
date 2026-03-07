@@ -1,0 +1,18 @@
+
+spring:
+  application:
+    name: springrevision
+  data:
+    mongodb:
+      auto-index-creation: true
+  mongodb:
+    uri: mongodb+srv://username:password@cluster0.2tpvjja.mongodb.net/?appName=Cluster0
+    database: journalDb
+server:
+  port: 8080
+
+logging:
+  file:
+    name: logs/application.log
+  level:
+    root: INFO
