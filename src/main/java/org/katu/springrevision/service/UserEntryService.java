@@ -5,7 +5,6 @@ import org.bson.types.ObjectId;
 import org.katu.springrevision.entity.JournalEntity;
 import org.katu.springrevision.entity.UserEntity;
 import org.katu.springrevision.repository.UserEntryRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -16,11 +15,13 @@ import java.util.Optional;
 @Service
 @Slf4j
 public class UserEntryService {
-    @Autowired
-    private UserEntryRepository userEntryRepository;
+    private final UserEntryRepository userEntryRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    public UserEntryService(UserEntryRepository userEntryRepository, PasswordEncoder passwordEncoder) {
+        this.userEntryRepository = userEntryRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     public void saveEntry(UserEntity userEntity) {
         try{

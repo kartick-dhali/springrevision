@@ -1,5 +1,6 @@
 package org.katu.springrevision.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
 import org.katu.springrevision.entity.JournalEntity;
 import org.katu.springrevision.entity.UserEntity;
@@ -9,27 +10,30 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 @RestController
 @RequestMapping("/journal")
+@Slf4j
 public class JournalEntryControllerV2 {
-    @Autowired
-    private JournalEntryService journalEntryService;
-    @Autowired
-    private UserEntryService userEntryService;
+    private final JournalEntryService journalEntryService;
+    private final UserEntryService userEntryService;
+
+    public JournalEntryControllerV2(JournalEntryService journalEntryService, UserEntryService userEntryService) {
+        this.journalEntryService = journalEntryService;
+        this.userEntryService = userEntryService;
+    }
 
     @GetMapping
-    public ResponseEntity<?> getJournalEntries() {
-        Authentication authentication = SecurityContextHolder
-                .getContext()
-                .getAuthentication();
-
-        assert authentication != null;
-        String username =  authentication.getName();
+    public ResponseEntity<?> getJournalEntries(@AuthenticationPrincipal User userdetail) {
+        String username =  userdetail.getUsername();
+        log.info("username: {}", userdetail);
         UserEntity user = userEntryService.findByUserName(username);
        List<JournalEntity> all = user.getJournals();
        if (all.isEmpty()) {
@@ -39,15 +43,11 @@ public class JournalEntryControllerV2 {
     }
 
     @PostMapping
-    public ResponseEntity<JournalEntity> insertJournalEntry(@RequestBody JournalEntity journalEntity) {
-        Authentication authentication = SecurityContextHolder
-                .getContext()
-                .getAuthentication();
-
-        assert authentication != null;
-        String username =  authentication.getName();
+    public ResponseEntity<JournalEntity> insertJournalEntry(@RequestBody JournalEntity journalEntity,
+                                                            @AuthenticationPrincipal User userdetail) {
+        String username =  userdetail.getUsername();
         try {
-            journalEntity.setJournalDate(new Date());
+            journalEntity.setJournalDate(LocalDateTime.now());
             journalEntryService.saveEntry(journalEntity,username );
             return ResponseEntity.ok().body(journalEntity);
         }catch (Exception e){
@@ -57,13 +57,9 @@ public class JournalEntryControllerV2 {
     }
 
     @GetMapping("id/{journalId}")
-    public  ResponseEntity<?> getJournalEntry(@PathVariable ObjectId journalId) {
-        Authentication authentication = SecurityContextHolder
-                .getContext()
-                .getAuthentication();
-
-        assert authentication != null;
-        String username =  authentication.getName();
+    public  ResponseEntity<?> getJournalEntry(@PathVariable ObjectId journalId,
+                                              @AuthenticationPrincipal User userdetail) {
+        String username =  userdetail.getUsername();
         Optional<JournalEntity> journal = userEntryService.findJournalByUsername(username, journalId);
         if (journal.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -73,14 +69,11 @@ public class JournalEntryControllerV2 {
     }
 
     @DeleteMapping("id/{journalId}")
-    public ResponseEntity<?> deleteJournalEntry(@PathVariable ObjectId journalId) {
+    public ResponseEntity<?> deleteJournalEntry(@PathVariable ObjectId journalId,
+                                                @AuthenticationPrincipal User userdetail) {
 
-        Authentication authentication = SecurityContextHolder
-                .getContext()
-                .getAuthentication();
+        String username =  userdetail.getUsername();
 
-        assert authentication != null;
-        String username =  authentication.getName();
         boolean deleted = journalEntryService.deleteJournalEntryById(journalId, username);
 
         if (!deleted) {
@@ -91,13 +84,10 @@ public class JournalEntryControllerV2 {
     }
 
     @PutMapping("id/{journalId}")
-    public   ResponseEntity<?> updateJournalEntry(@PathVariable ObjectId journalId,@RequestBody JournalEntity journalEntity) {
-        Authentication authentication = SecurityContextHolder
-                .getContext()
-                .getAuthentication();
-
-        assert authentication != null;
-        String username =  authentication.getName();
+    public   ResponseEntity<?> updateJournalEntry(@PathVariable ObjectId journalId,
+                                                  @RequestBody JournalEntity journalEntity,
+                                                  @AuthenticationPrincipal User userdetail) {
+        String username =  userdetail.getUsername();
         JournalEntity updatedJournal =
                 journalEntryService.updateJournalEntry(journalId, journalEntity,username);
 

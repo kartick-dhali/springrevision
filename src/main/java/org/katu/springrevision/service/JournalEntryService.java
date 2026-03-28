@@ -6,7 +6,6 @@ import org.katu.springrevision.entity.UserEntity;
 import org.katu.springrevision.repository.JournalEntryRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,12 +14,16 @@ import java.util.Optional;
 
 @Service
 public class JournalEntryService {
-    @Autowired
-    private JournalEntryRepository journalEntryRepository;
-    @Autowired
-    private UserEntryService userEntryService;
+
+    private final JournalEntryRepository journalEntryRepository;
+    private final UserEntryService userEntryService;
 
     private static final Logger logger = LoggerFactory.getLogger(JournalEntryService.class);
+
+    public JournalEntryService(JournalEntryRepository journalEntryRepository, UserEntryService userEntryService) {
+        this.journalEntryRepository = journalEntryRepository;
+        this.userEntryService = userEntryService;
+    }
 
     @Transactional
     public void saveEntry(JournalEntity journalEntity, String username) {
@@ -39,7 +42,6 @@ public class JournalEntryService {
         } catch (Exception e) {
             // Log the exception (recommended if you have logger)
             logger.error("Error while saving journal entry", e);
-            System.err.println("Error while saving journal entry: " + e.getMessage());
             throw new RuntimeException("Failed to save journal entry", e);
         }
     }

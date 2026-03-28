@@ -3,24 +3,24 @@ package org.katu.springrevision.controller;
 import org.katu.springrevision.entity.UserEntity;
 import org.katu.springrevision.repository.UserEntryRepository;
 import org.katu.springrevision.service.UserEntryService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-
 @RestController
 @RequestMapping("/user")
 public class UserEntryController {
-    @Autowired
-    private UserEntryService userEntryService;
-    @Autowired
-    private UserEntryRepository userEntryRepository;
-//    @GetMapping
-//    public List<UserEntity> getAllUser(){
-//        return userEntryService.findAll();
-//    }
+
+    private final UserEntryService userEntryService;
+    private final UserEntryRepository userEntryRepository;
+
+
+    public UserEntryController(UserEntryService userEntryService, UserEntryRepository userEntryRepository) {
+        this.userEntryService = userEntryService;
+        this.userEntryRepository = userEntryRepository;
+    }
+
 
     @GetMapping
     public String getUserName(){

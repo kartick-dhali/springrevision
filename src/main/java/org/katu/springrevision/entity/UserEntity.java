@@ -1,7 +1,6 @@
 package org.katu.springrevision.entity;
 
-import lombok.Data;
-import lombok.NonNull;
+import lombok.*;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -13,6 +12,10 @@ import java.util.List;
 
 @Document(collection = "users")
 @Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserEntity {
     @Id
     private ObjectId id;
@@ -21,7 +24,8 @@ public class UserEntity {
     private String userName;
     @NonNull
     private String password;
-
+    private String email;
+    private boolean isSentimentAnalysisEnabled;
     @DBRef
     private List<JournalEntity> journals = new ArrayList<>();
 
