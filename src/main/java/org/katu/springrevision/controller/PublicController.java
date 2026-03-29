@@ -1,5 +1,6 @@
 package org.katu.springrevision.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.katu.springrevision.DTO.LoginRequest;
 import org.katu.springrevision.entity.UserDetailsServiceImp;
 import org.katu.springrevision.entity.UserEntity;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/public")
+@Tag(name = "Public API", description = "Sinup, Login and Health Check")
 public class PublicController {
 
 

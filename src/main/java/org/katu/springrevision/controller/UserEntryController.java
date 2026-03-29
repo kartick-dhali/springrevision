@@ -1,5 +1,6 @@
 package org.katu.springrevision.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.katu.springrevision.entity.UserEntity;
 import org.katu.springrevision.repository.UserEntryRepository;
 import org.katu.springrevision.service.UserEntryService;
@@ -10,6 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/user")
+@Tag(name = "User API", description = "CRUD On User")
 public class UserEntryController {
 
     private final UserEntryService userEntryService;
