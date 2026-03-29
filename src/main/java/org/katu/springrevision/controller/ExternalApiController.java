@@ -1,5 +1,6 @@
 package org.katu.springrevision.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.katu.springrevision.DTO.PlaceHolderPostRequest;
 import org.katu.springrevision.DTO.PlaceHolderPostResponse;
 import org.katu.springrevision.service.PlaceHolderPostService;
@@ -20,6 +21,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/external")
+@Tag(name = "External API", description = "Third part API Integration")
 public class ExternalApiController {
     private final WeatherService weatherService;
     private final PlaceHolderPostService placeHolderPostService;

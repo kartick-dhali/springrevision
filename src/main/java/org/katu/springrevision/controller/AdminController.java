@@ -1,5 +1,6 @@
 package org.katu.springrevision.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.katu.springrevision.entity.UserEntity;
 import org.katu.springrevision.service.UserEntryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/admin")
+@Tag(name = "Admin API", description = "Get all user")
 public class AdminController {
 
     @Autowired

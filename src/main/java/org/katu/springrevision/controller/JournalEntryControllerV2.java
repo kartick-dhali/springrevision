@@ -1,5 +1,6 @@
 package org.katu.springrevision.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
 import org.katu.springrevision.entity.JournalEntity;
@@ -21,6 +22,7 @@ import java.util.*;
 @RestController
 @RequestMapping("/journal")
 @Slf4j
+@Tag(name = "Journal API", description = "CRUD Operation at Journal")
 public class JournalEntryControllerV2 {
     private final JournalEntryService journalEntryService;
     private final UserEntryService userEntryService;

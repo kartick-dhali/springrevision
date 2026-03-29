@@ -54,3 +54,8 @@ logging:
 weather:
   api:
     key: ${WHEATHER_API}
+springdoc:
+  swagger-ui:
+    path: /docs
+    operationsSorter: method
+    tagsSorter: alpha
