@@ -32,7 +32,8 @@ build/
 ### VS Code ###
 .vscode/
 
-*.yml
+application-prod.yml
 # Logs
 *.log
 logs/
+.env

@@ -1,0 +1,56 @@
+
+spring:
+  application:
+    name: springrevision
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+      username: ${REDIS_USERNAME}
+      password: ${REDIS_PASSWORD}
+
+    mongodb:
+      auto-index-creation: true
+  mongodb:
+    uri: ${MONGO_URI}
+    database: journalDb
+
+  mail:
+    host: smtp.gmail.com
+    port: ${EMAIL_PORT}
+    username: ${EMAIL_USER}
+    password: ${EMAIL_PASSKEY}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+  kafka:
+    bootstrap-servers: ${KAFKA_SERVER}
+    properties:
+      sasl.mechanism: PLAIN
+      sasl.jaas.config: "org.apache.kafka.common.security.plain.PlainLoginModule required username=${KAFKA_USER} password=${KAFKA_PASSWORD};"
+      security.protocol: SASL_SSL
+      session.timeout.ms: 45000
+      spring.json.value.default.type: org.katu.springrevision.DTO.EmailEvent
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      group-id: email-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+client:
+  id: ${KAFKA_CLIENTID}
+server:
+  port: 8080
+logging:
+  file:
+    name: logs/application.log
+  level:
+    root: INFO
+weather:
+  api:
+    key: ${WHEATHER_API}
